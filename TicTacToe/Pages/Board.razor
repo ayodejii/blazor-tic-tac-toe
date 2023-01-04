@@ -1,5 +1,29 @@
-﻿<h3>Board</h3>
+﻿<div>
+    <div class="status">@Status</div>
+    <div class="board-row">
+        <Square HandleClick='(e) => GetSomethingDone(0)' Value="@stringArray[0]"/>
+        <Square HandleClick='(e) => GetSomethingDone(1)' Value="@stringArray[1]" />
+        <Square HandleClick='(e) => GetSomethingDone(2)' Value="@stringArray[2]" />
+    </div>
+    <div class="board-row">
+        <Square HandleClick='(e) => GetSomethingDone(3)' Value="@stringArray[3]"/>
+        <Square HandleClick='(e) => GetSomethingDone(4)' Value="@stringArray[4]" />
+        <Square HandleClick='(e) => GetSomethingDone(5)' Value="@stringArray[5]" />
+    </div>
+    <div class="board-row">
+        <Square HandleClick='(e) => GetSomethingDone(6)' Value="@stringArray[6]" />
+        <Square HandleClick='(e) => GetSomethingDone(7)' Value="@stringArray[7]" />
+        <Square HandleClick='(e) => GetSomethingDone(8)' Value="@stringArray[8]" />
+    </div>
+</div>
 
 @code {
+    const string Status = "Next player : X";
 
+    string[] stringArray = new string[9];
+
+    void GetSomethingDone(int e)
+    {
+        stringArray[e] = "X";
+    }
 }

@@ -1,5 +1,17 @@
-﻿<h3>Square</h3>
+﻿
+<button class="square" @onclick="GetSomethingDone">
+    @Value
+</button>
 
 @code {
+    [Parameter]
+    public string Value { get; set; }
 
+    [Parameter]
+    public EventCallback<int> HandleClick { get; set; }
+
+    private void GetSomethingDone(MouseEventArgs e)
+    {
+        HandleClick.InvokeAsync();
+    } 
 }
