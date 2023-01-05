@@ -1,29 +1,89 @@
 ﻿<div>
     <div class="status">@Status</div>
     <div class="board-row">
-        <Square HandleClick='(e) => GetSomethingDone(0)' Value="@stringArray[0]"/>
-        <Square HandleClick='(e) => GetSomethingDone(1)' Value="@stringArray[1]" />
-        <Square HandleClick='(e) => GetSomethingDone(2)' Value="@stringArray[2]" />
+        <Square HandleClick='(e) => Play(0)' Value="@square[0]"/>
+        <Square HandleClick='(e) => Play(1)' Value="@square[1]" />
+        <Square HandleClick='(e) => Play(2)' Value="@square[2]" />
     </div>
     <div class="board-row">
-        <Square HandleClick='(e) => GetSomethingDone(3)' Value="@stringArray[3]"/>
-        <Square HandleClick='(e) => GetSomethingDone(4)' Value="@stringArray[4]" />
-        <Square HandleClick='(e) => GetSomethingDone(5)' Value="@stringArray[5]" />
+        <Square HandleClick='(e) => Play(3)' Value="@square[3]"/>
+        <Square HandleClick='(e) => Play(4)' Value="@square[4]" />
+        <Square HandleClick='(e) => Play(5)' Value="@square[5]" />
     </div>
     <div class="board-row">
-        <Square HandleClick='(e) => GetSomethingDone(6)' Value="@stringArray[6]" />
-        <Square HandleClick='(e) => GetSomethingDone(7)' Value="@stringArray[7]" />
-        <Square HandleClick='(e) => GetSomethingDone(8)' Value="@stringArray[8]" />
+        <Square HandleClick='(e) => Play(6)' Value="@square[6]" />
+        <Square HandleClick='(e) => Play(7)' Value="@square[7]" />
+        <Square HandleClick='(e) => Play(8)' Value="@square[8]" />
     </div>
 </div>
 
 @code {
-    const string Status = "Next player : X";
 
-    string[] stringArray = new string[9];
+    string NextPlayer = "X";
+    string Status = "Next player : X";
 
-    void GetSomethingDone(int e)
+    string[] square = new string[9];
+    bool xIsNext = true;
+
+    void Play(int e)
     {
-        stringArray[e] = "X";
+        var winner = DetermineWinner(square);
+        bool winnerDetermined = winner != null;
+
+        if (!winnerDetermined && string.IsNullOrWhiteSpace(square[e]))
+        {
+            square[e] = xIsNext ? "X" : "O";
+
+            NextPlayer = xIsNext ? "O" : "X";
+
+            Status = $"Next player : {NextPlayer}";
+
+            xIsNext = !xIsNext;
+
+            UpdateGameResult(square, e);
+        }
+
+    }
+
+    void UpdateGameResult(string[] squares, int player)
+    {
+        string winner = DetermineWinner(square);
+
+        if (square.All(x => !string.IsNullOrWhiteSpace(x)) && winner == null)
+            Status = "Tied";
+
+        if(winner != null) 
+            Status = $"Winner is {square[player]}";
+    }
+
+    string DetermineWinner(string[] squares)
+    {
+        // this represents different ways a player can win the game
+
+        int[][] winningLines = new int[][]
+        {
+            new int[] {0, 1, 2},
+            new int[] {3, 4, 5},
+            new int[] {6, 7, 8},
+            new int[] {0, 3, 6},
+            new int[] {1, 4, 7},
+            new int[] {2, 5, 8},
+            new int[] {0, 4, 8},
+            new int[] {2, 4, 6}
+        };
+
+        foreach (int[] lines in winningLines)
+        {
+            int lineOne = lines[0];
+            int lineTwo = lines[1];
+            int lineThree = lines[2];
+
+            if (!string.IsNullOrEmpty(squares[lineOne]) && squares[lineOne] == squares[lineTwo] && squares[lineOne] == squares[lineThree])
+            {
+                return squares[lineOne];
+            }
+        }
+        return null;
+
     }
 }

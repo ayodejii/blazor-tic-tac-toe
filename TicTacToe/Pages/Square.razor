@@ -1,5 +1,5 @@
 ﻿
-<button class="square" @onclick="GetSomethingDone">
+<button class="square" @onclick="Play">
     @Value
 </button>
 
@@ -10,7 +10,7 @@
     [Parameter]
     public EventCallback<int> HandleClick { get; set; }
 
-    private void GetSomethingDone(MouseEventArgs e)
+    private void Play(MouseEventArgs e)
     {
         HandleClick.InvokeAsync();
     } 
